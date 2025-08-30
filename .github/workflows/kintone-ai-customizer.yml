@@ -1,0 +1,40 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main, work]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/kintone-ai-customizer/plugin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: pnpm
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-dist
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && env.KINTONE_DOMAIN != ''
+    steps:
+      - run: echo "Deploying to $KINTONE_DOMAIN is not configured yet"

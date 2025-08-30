@@ -1,0 +1,14 @@
+{
+  "manifest_version": 1,
+  "name": {
+    "en": "AI Customizer",
+    "ja": "AIカスタマイザー"
+  },
+  "version": "0.1.0",
+  "type": "APP",
+  "description": {
+    "en": "Generate and deploy JS/CSS via AI",
+    "ja": "生成AIでJS/CSSを生成して適用"
+  },
+  "icon": "icon.png"
+}
