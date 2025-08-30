@@ -1,0 +1,6 @@
+node_modules
+dist
+
+# plugin assets
+icon*.png
+screenshot*.png
