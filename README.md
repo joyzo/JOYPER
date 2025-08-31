@@ -22,7 +22,7 @@ AI 生成コードをデプロイするプラグインの雛形を提供して�
 - プルリクエストやプッシュ時に `pnpm lint`・`pnpm test`・`pnpm build` を自動実行
 - `main` ブランチへのプッシュ時にはビルド成果物をアーティファクトとして保存
 - `KINTONE_DOMAIN` 環境変数が設定されている場合のみデプロイジョブが実行
-- ワークフロー定義は `.github/workflows/ci.yml` を参照
+- ワークフロー定義は `.github/workflows/kintone-plugin.yml` を参照
 
 ## 開発の始め方
 
