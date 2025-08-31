@@ -40,7 +40,7 @@ pnpm test
 ```
 
 ## CI/CD
-GitHub Actions により、プッシュやプルリクエスト時に `pnpm lint`・`pnpm test`・`pnpm build` が自動実行されます。`main` ブランチへプッシュされた際はビルド成果物がアーティファクトとして保存されます。`KINTONE_DOMAIN` 環境変数が設定されている場合のみデプロイジョブが実行されます。ワークフロー定義は `.github/workflows/kintone-plugin.yml` を参照してください。
+GitHub Actions により、プッシュやプルリクエスト時に `pnpm lint`・`pnpm test`・`pnpm build` が自動実行されます。`main` ブランチへプッシュされた際はビルド成果物がアーティファクトとして保存されます。`KINTONE_DOMAIN` 環境変数が設定されている場合のみデプロイジョブが実行されます。ワークフロー定義は `.github/workflows/kintone-ai-customizer.yml` を参照してください。
 
 ## Dry-run 手順
 1. `pnpm dev` で設定画面を起動
