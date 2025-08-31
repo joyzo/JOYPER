@@ -1,14 +1,37 @@
 # JOYPER
 
-AI Concierge JOYPER
+AI Concierge JOYPER は複数の AI サービスをまとめて管理するためのモノレポです。
 
-## 概要
-JOYPER は AI コンシェルジュ関連の実験リポジトリです。現在は kintone 向けプラグインを同梱しています。
+## ディレクトリ構成
 
-## サービス
-- `services/kintone-ai-customizer` - 設定画面から要件を入力すると AI が JS/CSS を生成し kintone に適用するプラグイン。詳細は [services/kintone-ai-customizer/plugin/README.md](services/kintone-ai-customizer/plugin/README.md) を参照してください。
+```
+JOYPER/
+├── README.md
+└── services/
+    └── kintone-ai-customizer/
+        └── plugin/  # kintone 向け AI カスタマイズプラグイン雛形
+```
 
-## 開発を始めるには
-各サービスディレクトリに移動し、README を参照してください。
+各サービスの詳細はそれぞれの README を参照してください。現在は kintone アプリに対して
+AI 生成コードをデプロイするプラグインの雛形を提供しています。
 
-楽しく開発しよう！
+## CI/CD
+
+このリポジトリでは GitHub Actions による CI/CD を整備しています。
+
+- プルリクエストやプッシュ時に `pnpm lint`・`pnpm test`・`pnpm build` を自動実行
+- `main` ブランチへのプッシュ時にはビルド成果物をアーティファクトとして保存
+- `KINTONE_DOMAIN` 環境変数が設定されている場合のみデプロイジョブが実行
+- ワークフロー定義は `.github/workflows/ci.yml` を参照
+
+## 開発の始め方
+
+各サービスのディレクトリに移動し、以下のコマンドで開発を開始できます。
+
+```bash
+pnpm install
+pnpm dev
+```
+
+詳細なビルド手順や Dry-run については `services/kintone-ai-customizer/plugin/README.md` を
+参照してください。

@@ -14,14 +14,14 @@ jobs:
         working-directory: services/kintone-ai-customizer/plugin
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'pnpm'
-      - run: pnpm install
+          cache: pnpm
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm lint
       - run: pnpm test
       - run: pnpm build
@@ -31,3 +31,10 @@ jobs:
         with:
           name: plugin-dist
           path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && env.KINTONE_DOMAIN != ''
+    steps:
+      - run: echo "Deploying to $KINTONE_DOMAIN is not configured yet"
