@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  DEPLOY_ENVIRONMENT: staging
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,11 +33,76 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: plugin-dist
-          path: dist
+          path: services/kintone-ai-customizer/plugin/dist
 
-  deploy:
+  deploy-staging:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && env.KINTONE_DOMAIN != ''
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    defaults:
+      run:
+        working-directory: services/kintone-ai-customizer/plugin
     steps:
-      - run: echo "Deploying to $KINTONE_DOMAIN is not configured yet"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: pnpm
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin-dist
+          path: dist
+      - run: pnpm install --no-frozen-lockfile
+      - name: Deploy to Staging
+        env:
+          KINTONE_DOMAIN: ${{ secrets.KINTONE_DOMAIN }}
+          KINTONE_USERNAME: ${{ secrets.KINTONE_USERNAME }}
+          KINTONE_PASSWORD: ${{ secrets.KINTONE_PASSWORD }}
+          PLUGIN_ID: ${{ secrets.PLUGIN_ID }}
+          DEPLOY_ENVIRONMENT: staging
+        run: |
+          if [ -n "$KINTONE_DOMAIN" ]; then
+            echo "🚀 Deploying to staging environment: $KINTONE_DOMAIN"
+            pnpm run deploy:staging
+          else
+            echo "⚠️ KINTONE_DOMAIN not set, skipping deployment"
+          fi
+
+  deploy-production:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy:prod]')
+    defaults:
+      run:
+        working-directory: services/kintone-ai-customizer/plugin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: pnpm
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin-dist
+          path: dist
+      - run: pnpm install --no-frozen-lockfile
+      - name: Deploy to Production
+        env:
+          KINTONE_DOMAIN: ${{ secrets.KINTONE_DOMAIN_PROD }}
+          KINTONE_USERNAME: ${{ secrets.KINTONE_USERNAME_PROD }}
+          KINTONE_PASSWORD: ${{ secrets.KINTONE_PASSWORD_PROD }}
+          PLUGIN_ID: ${{ secrets.PLUGIN_ID_PROD }}
+          DEPLOY_ENVIRONMENT: production
+        run: |
+          if [ -n "$KINTONE_DOMAIN" ]; then
+            echo "🚀 Deploying to production environment: $KINTONE_DOMAIN"
+            pnpm run deploy:production
+          else
+            echo "⚠️ Production environment not configured, skipping deployment"
+          fi

@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "lint": "eslint \"src/**/*.{ts,vue}\"",
-    "test": "vitest"
+    "test": "vitest",
+    "deploy:staging": "tsx scripts/deploy.ts",
+    "deploy:production": "DEPLOY_ENVIRONMENT=production tsx scripts/deploy.ts"
   },
   "dependencies": {
     "vue": "^3.4.21",
@@ -15,12 +17,15 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-vue": "^5.0.4",
+    "archiver": "^6.0.1",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.2.5",
+    "tsx": "^4.7.0",
     "typescript": "^5.4.2",
     "vite": "^5.2.0",
     "vitest": "^1.3.1",
