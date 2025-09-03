@@ -1,6 +1,7 @@
 # kintone-ai-customizer plugin
 
 設定画面から要件と最小設定を入力し、AI経由でJS/CSSカスタマイズを生成してkintoneへ適用するためのプラグイン雛形です。
+詳細なプロンプト例や出力例は [MANUAL.md](./MANUAL.md) を参照してください。
 
 ## ディレクトリ構成
 ```
